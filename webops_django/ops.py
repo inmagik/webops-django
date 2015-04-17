@@ -258,9 +258,9 @@ def compose_graph(register, data):
             ser = partial_ops[op].parameters_serializer(data=op_params)
             ser.is_valid(raise_exception=True)
             
-            print "processing", op
+            #print "processing", op
             out =  partial_ops[op]().process(ser.validated_data)
-            print "done", op
+            #print "done", op
             return out
         
         return process_op(output_op)

@@ -8,6 +8,8 @@ from django.utils.translation import ugettext_lazy as _
 import json
 from rest_framework import serializers
 import requests
+import logging
+log = logging.getLogger('webops_django')
 
 EMPTY_VALUES = (None, '', [], (), {})
  
@@ -46,9 +48,11 @@ class FileField(serializers.FileField):
 
     def get_file_data_from_url(self, data):
         url = data['data']
+        log.info("downloading file: "+ url)
         r = requests.get(url)
         file_name = url.split("/")[-1]
         file_data = ContentFile(r.content, name=file_name)
+        log.info("file downloaded: "+ url)
         return file_data
 
 
@@ -58,7 +62,6 @@ class FileField(serializers.FileField):
         
         if data in EMPTY_VALUES:
             return None
-
         # Check if this is a base64 string
         if isinstance(data, dict):
             if 'data' not in data:
